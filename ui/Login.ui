@@ -25,57 +25,118 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="horizontalLayoutWidget">
+  <property name="styleSheet">
+   <string notr="true">QDialog{
+qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(37, 0, 255, 255), stop:1 rgba(255, 255, 255, 255))
+}</string>
+  </property>
+  <widget class="QFrame" name="verticalFrame">
    <property name="geometry">
     <rect>
-     <x>220</x>
-     <y>200</y>
-     <width>271</width>
-     <height>41</height>
+     <x>0</x>
+     <y>-10</y>
+     <width>446</width>
+     <height>29</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_3"/>
+  </widget>
+  <widget class="QFrame" name="horizontalFrame">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>130</y>
+     <width>521</width>
+     <height>211</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">text-align: center;</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0">
     <property name="leftMargin">
+     <number>12</number>
+    </property>
+    <property name="topMargin">
      <number>12</number>
     </property>
     <property name="rightMargin">
      <number>12</number>
     </property>
-    <item>
-     <widget class="QLabel" name="label_2">
-      <property name="minimumSize">
-       <size>
-        <width>70</width>
-        <height>0</height>
-       </size>
+    <item row="0" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <property name="spacing">
+       <number>2</number>
       </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>14</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="textbox_user">
+        <property name="styleSheet">
+         <string notr="true">font: 14pt &quot;.AppleSystemUIFont&quot;;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="error_user">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>10</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout_6">
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <property name="topMargin">
+       <number>16</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="textbox_pass"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="error_password">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="5" column="1">
+     <widget class="QPushButton" name="btn_registrate">
       <property name="text">
-       <string>User</string>
+       <string>Registrate</string>
       </property>
      </widget>
     </item>
-    <item>
-     <widget class="QLineEdit" name="textbox_user"/>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="btn_login">
+      <property name="text">
+       <string>Iniciar Sesión</string>
+      </property>
+     </widget>
     </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_2">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>250</y>
-     <width>271</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <property name="leftMargin">
-     <number>12</number>
-    </property>
-    <property name="rightMargin">
-     <number>12</number>
-    </property>
-    <item>
+    <item row="1" column="0">
      <widget class="QLabel" name="label">
       <property name="minimumSize">
        <size>
@@ -84,29 +145,29 @@
        </size>
       </property>
       <property name="text">
-       <string>Password</string>
+       <string>Contraseña</string>
       </property>
      </widget>
     </item>
-    <item>
-     <widget class="QLineEdit" name="textbox_pass"/>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="minimumSize">
+       <size>
+        <width>70</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Usuario</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QPushButton" name="btn_login">
-   <property name="geometry">
-    <rect>
-     <x>290</x>
-     <y>320</y>
-     <width>113</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Login</string>
-   </property>
-  </widget>
  </widget>
+ <tabstops>
+  <tabstop>btn_login</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
