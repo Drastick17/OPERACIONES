@@ -22,7 +22,8 @@ try:
         users = [
             ('Ariel', '123py'),
             ('Danny', '123py'),
-            ('Robinson', '123py')
+            ('Robinson', '123py'),
+            ('ad', 'ad')
         ]
 
         users_query = "INSERT INTO USERS (name, password) VALUES (?, ?)"
