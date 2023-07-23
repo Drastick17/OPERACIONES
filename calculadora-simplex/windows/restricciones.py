@@ -48,11 +48,12 @@ class Table(QWidget):
         self.init_ui()
 
     def init_ui(self):
-        self.rows_label = QLabel("Número de variables:")
-        self.rows_input = QLineEdit()
 
-        self.columns_label = QLabel("Número de restricciones:")
+        self.columns_label = QLabel("Número de variables:")
         self.columns_input = QLineEdit()
+        
+        self.rows_label = QLabel("Número de restricciones:")
+        self.rows_input = QLineEdit()
 
         self.space = QLabel("")
         self.space.setObjectName('space')
