@@ -1,6 +1,10 @@
 {
+  "editor.tabSize": 2, // Tamaño de la tabulación en espacios
+  "editor.insertSpaces": true, // Usar espacios en lugar de tabulaciones
+  "editor.formatOnSave": true, // Formatear el código al guardar el archivo
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // El nombre del formateador por defecto (puedes cambiarlo según el formateador que prefieras)
   "[python]": {
-    "editor.defaultFormatter": "ms-python.autopep8"
+    "editor.defaultFormatter": "ms-python.python" // Configuración específica para Python
   },
   "python.formatting.provider": "none"
 }

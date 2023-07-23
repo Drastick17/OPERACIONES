@@ -1,101 +1,109 @@
-import math
+from PyQt5.QtWidgets import QApplication, QWidget, QTableWidget
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QVBoxLayout, QTableWidgetItem, QLabel, QPushButton
 
-iterations = []
-optimal_values = []
 
+class Maximizacion:
+    def __init__(self):
+        self.iterations = []
 
-def show_table_terminal(table, i):
-    print("Iteracion #" + str(i))
-    for row in table:
-        for value in row:
-            print(math.floor(value), end="\t")
+    def mostrar_tabla(self, tabla, iteracion):
+        print("Iteración #" + str(iteracion))
+        for fila in tabla:
+            for valor in fila:
+                print(valor, end="\t")
+            print("")
+
+    def hay_negativos(self, tabla):
+        for valor in tabla[0]:
+            if valor < 0:
+                print("Aún hay negativos")
+                return True
+        return False
+
+    def columna_pivote(self, tabla):
+        col_pivote = 0
+        for i in range(len(tabla[0]) - 1):
+            if tabla[0][i] < tabla[0][col_pivote]:
+                col_pivote = i
+        print("La columna pivote tiene el número " +
+              str(tabla[0][col_pivote]) + " posición " + str(col_pivote + 1))
+        return col_pivote
+
+    def fila_pivote(self, tabla, columna_pivote):
+        cocientes = []
+        for fila in tabla:
+            if fila[columna_pivote] > 0:
+                cocientes.append(fila[-1] / fila[columna_pivote])
+            else:
+                cocientes.append(5000000)
+        menor = 0
+        fila_pivote = 0
+        for i in range(len(cocientes)):
+            if cocientes[i] < cocientes[menor] and cocientes[i] > 0:
+                menor = i
+                fila_pivote = i
+        print("La fila pivote tiene el número " +
+              str(tabla[fila_pivote][columna_pivote]) + " posición " + str(fila_pivote + 1))
+        return fila_pivote
+
+    def dividir_por_pivote(self, tabla, fila_pivote, columna_pivote):
+        num = tabla[fila_pivote][columna_pivote]
+        print("El número para dividir es: " + str(num))
+        for i in range(len(tabla[fila_pivote])):
+            tabla[fila_pivote][i] /= num
+            print(tabla[fila_pivote][i], end=" ")
         print("")
-    iterations.append(table.copy()) 
 
-def has_negatives(table):
-    for value in table[0]:
-        if value < 0:
-            print("Aun hay negativos")
-            return True
-    return False
+    def eliminar_filas(self, tabla, fila_pivote, columna_pivote):
+        multiplicador = 0
+        for i in range(len(tabla)):
+            if i != fila_pivote:
+                multiplicador = tabla[i][columna_pivote]
+                for j in range(len(tabla[i])):
+                    tabla[i][j] -= multiplicador * tabla[fila_pivote][j]
 
-def column_pivote(table):
-    col_pivote = 0
-    for i in range(len(table[0]) - 1):
-        if table[0][i] < table[0][col_pivote]:
-            col_pivote = i
-    print("La columna pivote tiene el numero",
-          table[0][col_pivote], "posición", (col_pivote + 1))
-    return col_pivote
+    def calculo_fun_obj(self, tabla, funcion_obj):
+        valor_optimo = 0
+        for i in range(1, len(tabla)):
+            for j in range(len(tabla[i]) - len(funcion_obj) - 1):
+                if tabla[i][j] == 1:
+                    print("Valor óptimo en fila " + str(i) + " columna " +
+                          str(j) + " x" + str(j + 1) + " es " + str(tabla[i][-1]))
+                    valor_optimo += tabla[i][-1] * funcion_obj[j]
+        print("El valor óptimo de la solución es " + str(valor_optimo))
 
-def row_pivote(table, column_pivote):
-    quotients = []
-    for i in range(len(table)):
-        if table[i][column_pivote] > 0:
-            quotients.append(
-                table[i][len(table[0]) - 1] / table[i][column_pivote])
-        else:
-            quotients.append(5000000)
-    less = 0
-    row_pivote = 0
-    for i in range(len(quotients)):
-        if quotients[i] < quotients[less] and quotients[i] > 0:
-            less = i
-            row_pivote = i
-    print("La fila pivote tiene el numero",
-          table[row_pivote][column_pivote], "posicion", (row_pivote + 1))
-    return row_pivote
+    def maximizacion(self, tabla_simplex, funcion_obj):
+        # tabla_simplex = [
+        #     [-1, -3, -2, 0, 0, 0, 0],
+        #     [2, 4, 1, 1, 0, 0, 6],
+        #     [-1, 6, 1, 0, 1, 0, 1],
+        #     [1, 8, 3, 0, 0, 1, 2]
+        # ]
 
-def split_by_pivote(table, row_pivote, column_pivote):
-    num = table[row_pivote][column_pivote]
-    print("El numero para dividir es:", num)
-    for i in range(len(table[row_pivote])):
-        table[row_pivote][i] /= num
-        print(table[row_pivote][i], end=" ")
-    print("")
+        # num_variables = 4
+        # num_restricciones = 2
+        # num_restricciones_m = 0
+        # funcion_obj = [1, 3, 2]
+        iteracion = 0
 
-def delete_rows(table, row_pivote, column_pivote):
-    multiplier = 0
-    for i in range(len(table)):
-        if i != row_pivote:
-            multiplier = table[i][column_pivote]
-            for j in range(len(table[i])):
-                table[i][j] -= multiplier * table[row_pivote][j]
+        self.mostrar_tabla(tabla_simplex, iteracion)
+        self.iterations.append(tabla_simplex.copy())
 
-def calc_fun_obj(table, funcion_obj):
-    valor_optimo = 0
-    for i in range(1, len(table)):
-        for j in range(len(table[0]) - len(funcion_obj) - 1):
-            if table[i][j] == 1:
-                #optimal_values.append(f"Valor óptimo en fila {i}, columna {j} (x{j+1}): {math.floor(table[i][len(table[0]) - 1])}")
-                optimal_values.append(f"(x{j+1}): {math.floor(table[i][len(table[0]) - 1])}")
-                print("Valor optimo en fila", i, "columna", j, "x" + str(j + 1), "es", math.floor(table[i][len(table[0]) - 1]))
-                valor_optimo += table[i][len(table[0]) - 1] * funcion_obj[j]
-    print("El valor optimo de la solucion es", math.floor(valor_optimo))
+        while self.hay_negativos(tabla_simplex):
+            self.iterations.append(tabla_simplex.copy())
+            col_piv = self.columna_pivote(tabla_simplex)
+            fil_piv = self.fila_pivote(tabla_simplex, col_piv)
+            self.dividir_por_pivote(tabla_simplex, fil_piv, col_piv)
+            iteracion += 1
+            self.eliminar_filas(tabla_simplex, fil_piv, col_piv)
+            self.mostrar_tabla(tabla_simplex, iteracion)
 
-def solutionObj():
-    result = {
-        "optimal_values": optimal_values,
-        "solution_tables": iterations
-    }
-    return result
+        self.calculo_fun_obj(tabla_simplex, funcion_obj)
 
-def calc_table(table, function_obj):
+    def iteraciones(self):
+        return self.iterations
 
 
-    iteracion = 0
-
-    show_table_terminal(table, iteracion)
-
-    while has_negatives(table):
-        col_piv = column_pivote(table)
-        fil_piv = row_pivote(table, col_piv)
-        split_by_pivote(table, fil_piv, col_piv)
-        iteracion += 1
-        delete_rows(table, fil_piv, col_piv)
-        show_table_terminal(table, iteracion)
-
-    calc_fun_obj(table, function_obj)
-
-    solution = solutionObj()
-    return solution
+# if __name__ == "__main__":
+#     app = QApplication(sys.ar)
