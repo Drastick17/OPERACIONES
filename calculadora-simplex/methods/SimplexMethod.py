@@ -171,9 +171,9 @@ class SimplexMethod:
                 z_optimal = cz[0, cols - 1] + np.matmul(np.transpose(C), X)
                 st[0, cols - 1] = z_optimal
 
+                self.iterations[iteration -1].append(st.copy())
                 print('\nsimplex tableau\n\n')
                 print(st)
-                self.iterations[iteration -1].append(st.copy())
                 print('\ncurrent Z\n\n')
                 print(z_optimal)
 

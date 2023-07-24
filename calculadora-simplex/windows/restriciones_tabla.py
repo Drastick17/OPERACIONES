@@ -104,14 +104,25 @@ class TablaRestricciones(QWidget):
             print("Error: Ingrese un número válido para filas y columnas.")
 
     def maximizar(self):
-        restricciones, resultantes, desigualdades, funcion_obj = self.obtener_valores(1)
-        np_rests = np.array(restricciones.copy())
+        np_restricciones, np_resultantes, np_desigualdades, np_funcion_obj = self.obtener_valores(1)
+        # np_A = np.array(restricciones.copy())
+        # np_B = np.array([[elemento] for elemento in resultantes])
+        # np_C = np.array([[elemento] for elemento in funcion_obj])
+        # np_D = np.array([[elemento] for elemento in desigualdades])
+        # print(np_restricciones)
+        # print(np_resultantes)
+        # print(len(np_funcion_obj))
+        # print(len(np_desigualdades))
 
-
-
-        print(np_rests, np_results, np_desi, np_func)
         solver = SimplexMethod()
-        solver.simplex('max',np_rests, np_results, np_func, np_desi, 100 )
+        solver.simplex('max',np_restricciones, np_resultantes, np_funcion_obj, np_desigualdades, 100)
+        print(solver.iterations)
+        # solver.simplex('max', 
+        #     np.array([[2, 4, 1], [-1, 6, 1], [1, 8, 3]]),
+        #     np.array([[6], [1], [2]]),
+        #     np.array([[1], [3], [2]]),
+        #     np.array([[0], [1], [-1], [1]]), 100)
+                #solver.simplex('max', np_restricciones, np_resultantes, np_funcion_obj, np_desigualdades, 100)
         # print(filas)
 
         # maxMethod = SimplexMax(filas,  restricciones, self.filas,  funcion_obj)
@@ -119,12 +130,11 @@ class TablaRestricciones(QWidget):
         # maxMethod.maximizacion(iteraciones)
         # table_ui = TableWidget(iteraciones)
         # table_ui.show()
-        
-    def obtener_valores(self, esMaximizacion):
 
+    def obtener_valores(self, esMaximizacion):
         restricciones = []
         desigualdades = []
-      
+
         # recuperar restricciones
         for fila in range(2, self.filas + 2):
             fila_actual = []
@@ -136,7 +146,7 @@ class TablaRestricciones(QWidget):
                         if valor != '':
                             fila_actual.append(int(valor))
                         else:
-                            fila_actual.append(0)    
+                            fila_actual.append(0)
                     elif isinstance(cell_object.widget(), QComboBox):
                         # cambiar el texto del signo por el -1, 1 y agregarlo a la fila restricciones y su valor
                         valor = cell_object.widget().currentText()
@@ -147,50 +157,53 @@ class TablaRestricciones(QWidget):
                             fila_actual.append(1)
                             desigualdades.append(1)
             restricciones.append(fila_actual)
-        
+
         # recuperar funcion objetivo
         funcion_obj = []
-
         for columna in range(self.columnas + 2):
             cell_object = self.grid_layout.itemAtPosition(1, columna)
             if cell_object is not None and cell_object.widget() is not None:
                 if isinstance(cell_object.widget(), QLineEdit) or isinstance(cell_object.widget(), QComboBox):
                     valor_texto = cell_object.widget().text()
-                    if valor_texto:
-                        try:
-                            valor = float(valor_texto) 
-                            funcion_obj.append(valor)
-                        except ValueError:
-                            funcion_obj.append(0)  
+                    if valor_texto != '':
+                        valor = int(valor_texto) 
+                        funcion_obj.append(valor)
+                    else:
+                        funcion_obj.append(0)
 
+        # Asegurar que funcion_obj tenga la longitud correcta
+        while len(funcion_obj) < self.columnas:
+            funcion_obj.append(0)
+
+        # Asegurar que resultantes tenga la misma longitud que restricciones
+        resultantes = [0] * len(restricciones)
 
         # (provisional) eliminar restricciones
         for fila in restricciones:
             index = len(fila) 
             del fila[index - 2]
-
-        # multiplicar por -1
-        restricciones.insert(0, funcion_obj.copy())
-        for i in range(len(restricciones[0])):
-            restricciones[0][i] *= -1
-
-        resultantes = []
-        for i in range(1, len(restricciones)):
-            resultante = restricciones[i].pop()
-            resultantes.append([resultante])
         
-        #Agregar z a las desigualdades
+        for i in range(len(restricciones)):
+            resultante = restricciones[i].pop()
+            resultantes[i] =  resultante
+
+        # print(resultantes)
+        # print(restricciones)
+        # print(desigualdades)
+        # print(funcion_obj)
+
+        #insertar Z en desigualdades
         desigualdades.insert(0, 0)
 
-        # print(f"desigualdades: {desigualdades}")
-        # print(f"resultantes: {resultantes}")
-        # print(f"restricciones: {restricciones} ")
-        # print(f"funcion_obj {funcion_obj}")
+        np_restricciones = np.array(restricciones)
+        np_resultantes = np.array([[elemento] for elemento in resultantes])
+        np_desigualdades = np.array([[elemento] for elemento in desigualdades])
+        np_funcion_obj = np.array([[elemento] for elemento in funcion_obj])
 
-        return restricciones, resultantes, desigualdades, funcion_obj
+        return np_restricciones, np_resultantes, np_desigualdades, np_funcion_obj
 
     def limpiar_tabla(self):
-        pass
+            pass
 
 if __name__ == '__main__':
     import sys
