@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QVBoxLayout, QWidget, QPushButton, QLabel, QGridLayout
 from PyQt5.QtCore import Qt
 import sys
+import numpy as np
 
 class TableWidget(QWidget):
     def __init__(self, iteraciones):
@@ -74,20 +75,19 @@ class TableWidget(QWidget):
         tabla = self.iteraciones[tabla_index]
         self.clear_grid()
 
-        for i, fila in enumerate(tabla):
-            for j, valor in enumerate(fila):
-                label = QLabel(str(valor))
-                label.setAlignment(Qt.AlignCenter)
-
-                label.setStyleSheet("""
+        for x,tabla in enumerate(tabla):
+            for i, fila in enumerate(tabla):
+                for j, valor in enumerate(fila):
+                    label = QLabel(str(round(valor,2)))
+                    label.setAlignment(Qt.AlignCenter)
+                    label.setStyleSheet("""
                     QLabel {
                         background-color: #FFFFFF;
                         color:#333;
                     }
-                """)
-
-                self.grid_layout.addWidget(label, i, j)
-
+                    """)
+                    self.grid_layout.addWidget(label, i, j)
+       
         self.iteration_label.setText(f"Iteración {tabla_index + 1}")
 
         self.grid_widget.show()
@@ -101,20 +101,31 @@ class TableWidget(QWidget):
 # if __name__ == '__main__':
 #     app = QApplication(sys.argv)
 
-#     iteraciones = [
-#         [
-#             [-1, -3, -2, 0, 0, 0, 0],
-#             [2, 4, 1, 1, 0, 0, 6],
-#             [-1, 6, 1, 0, 1, 0, 1],
-#             [1, 8, 3, 0, 0, 1, 2]
-#         ],
-#         [
-#             [-2, -3, -2, 0, 0, 0, 0],
-#             [2, 6, 1, 1, 3, 0, 5],
-#             [-1, 6, 2, 1, 3, 0, 1],
-#             [1, 8, 3, 0, 0, 1, 2]
-#         ],
-#     ]
+#     iteraciones = [[np.array([[ 498.5       ,    0.        ,  198.5       ,    0.        ,
+#         -199.5       , -100.        ,    0.        ,  600.5       ],
+#        [   2.66666667,    0.        ,    0.33333333,    1.        ,
+#           -0.66666667,    0.        ,    0.        ,    5.33333333],
+#        [  -0.16666667,    1.        ,    0.16666667,    0.        ,
+#            0.16666667,   -0.        ,    0.        ,    0.16666667],
+#        [   2.33333333,    0.        ,    1.66666667,    0.        ,
+#           -1.33333333,   -1.        ,    1.        ,    0.66666667]])], [np.array([[   0.        ,    0.        , -157.57142857,    0.        ,
+#           85.35714286,  113.64285714, -213.64285714,  458.07142857],
+#        [   0.        ,    0.        ,   -1.57142857,    1.        ,
+#            0.85714286,    1.14285714,   -1.14285714,    4.57142857],
+#        [   0.        ,    1.        ,    0.28571429,    0.        ,
+#            0.07142857,   -0.07142857,    0.07142857,    0.21428571],
+#        [   1.        ,    0.        ,    0.71428571,    0.        ,
+#           -0.57142857,   -0.42857143,    0.42857143,    0.28571429]])], [np.array([[   0.    ,    0.    ,   -1.3125,  -99.4375,    0.125 ,    0.    ,
+#         -100.    ,    3.5   ],
+#        [   0.    ,    0.    ,   -1.375 ,    0.875 ,    0.75  ,    1.    ,
+#           -1.    ,    4.    ],
+#        [   0.    ,    1.    ,    0.1875,    0.0625,    0.125 ,    0.    ,
+#            0.    ,    0.5   ],
+#        [   1.    ,    0.    ,    0.125 ,    0.375 ,   -0.25  ,    0.    ,
+#            0.    ,    2.    ]])], [np.array([[   0. ,   -1. ,   -1.5,  -99.5,    0. ,    0. , -100. ,    3. ],
+#        [   0. ,   -6. ,   -2.5,    0.5,    0. ,    1. ,   -1. ,    1. ],
+#        [   0. ,    8. ,    1.5,    0.5,    1. ,    0. ,    0. ,    4. ],
+#        [   1. ,    2. ,    0.5,    0.5,    0. ,    0. ,    0. ,    3. ]])]]
 
 #     table_widget = TableWidget(iteraciones)
 #     table_widget.show()

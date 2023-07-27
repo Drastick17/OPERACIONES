@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QComboBox, QLineEdit, QPushButton, QGridLayout, QVBoxLayout, QStackedLayout
 from PyQt5.QtCore import Qt
 from methods.SimplexMethod import SimplexMethod
-# from windows.tabla_simplex import TableWidget
+from windows.tabla_simplex import TableWidget
 import numpy as np
 class TablaRestricciones(QWidget):
     def __init__(self, regresar, filas, columnas):
@@ -113,10 +113,11 @@ class TablaRestricciones(QWidget):
         # print(np_resultantes)
         # print(len(np_funcion_obj))
         # print(len(np_desigualdades))
-
         solver = SimplexMethod()
         solver.simplex('max',np_restricciones, np_resultantes, np_funcion_obj, np_desigualdades, 100)
         print(solver.iterations)
+        table = TableWidget(solver.iterations)
+        table.show()
         # solver.simplex('max', 
         #     np.array([[2, 4, 1], [-1, 6, 1], [1, 8, 3]]),
         #     np.array([[6], [1], [2]]),

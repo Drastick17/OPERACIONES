@@ -243,3 +243,5 @@ if __name__ == '__main__':
     np.array([[1], [3], [2]]),
     np.array([[0], [1], [-1], [1]]), 
     100)
+    
+    print(solver.iterations)
