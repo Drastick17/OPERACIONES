@@ -4,9 +4,10 @@ import sys
 import numpy as np
 
 class TableWidget(QWidget):
-    def __init__(self, iteraciones):
+    def __init__(self, iteraciones, title = "Maximizar"):
         super().__init__()
         self.setMinimumSize(500, 180)
+        self.setWindowTitle(title)
         self.index = 0
         self.iteraciones = iteraciones
 

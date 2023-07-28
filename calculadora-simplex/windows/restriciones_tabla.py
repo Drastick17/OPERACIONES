@@ -97,7 +97,7 @@ class TablaRestricciones(QWidget):
                 button_regresar, self.filas + 5, 0, 1, self.columnas + 2)
 
             button_maximizar.clicked.connect(self.maximizar)
-            button_minimizar.clicked.connect(self.limpiar_tabla)
+            button_minimizar.clicked.connect(self.minimizar)
             button_regresar.clicked.connect(self.regresar)
 
         except ValueError:
@@ -132,6 +132,16 @@ class TablaRestricciones(QWidget):
         # table_ui = TableWidget(iteraciones)
         # table_ui.show()
 
+    def minimizar(self):
+        np_restricciones, np_resultantes, np_desigualdades, np_funcion_obj = self.obtener_valores(1)
+
+        solver = SimplexMethod()
+        solver.simplex('min',np_restricciones, np_resultantes, np_funcion_obj, np_desigualdades, 100)
+        print(solver.iterations)
+        table = TableWidget(solver.iterations, "Minimizar")
+        table.show()
+
+
     def obtener_valores(self, esMaximizacion):
         restricciones = []
         desigualdades = []
@@ -152,11 +162,11 @@ class TablaRestricciones(QWidget):
                         # cambiar el texto del signo por el -1, 1 y agregarlo a la fila restricciones y su valor
                         valor = cell_object.widget().currentText()
                         if valor == '>=':
-                            fila_actual.append(-1)
-                            desigualdades.append(-1)
-                        else:
                             fila_actual.append(1)
                             desigualdades.append(1)
+                        else:
+                            fila_actual.append(-1)
+                            desigualdades.append(-1)
             restricciones.append(fila_actual)
 
         # recuperar funcion objetivo
